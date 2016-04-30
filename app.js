@@ -39,6 +39,7 @@ enyo.kind({
 			that.draw();
 		}, function(sender) {
 			that.$.spinner.setShowing(false);
+			that.$.cloudwarning.setShowing(true);
 			console.log("Error loading database on '"+sender.url+"'");
 		});
 	},
@@ -50,6 +51,7 @@ enyo.kind({
 		var canvas_height = canvas.offsetHeight;
 		this.$.content.applyStyle("height", (canvas_height-(toolbaroffset*2))+"px");
 	},
+
 	resize: function() {
 		if (!Util.onSugar()) {
 			this.computeSize();
