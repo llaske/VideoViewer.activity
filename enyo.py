@@ -52,7 +52,7 @@ class Enyo:
             args = None
         else:
             start = start+1+len(size)
-            args = value[start:start+int(size)]
+            args = value[start:]
 
         # Call handler if exist
         logging.warning(value);

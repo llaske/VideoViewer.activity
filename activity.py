@@ -1,11 +1,11 @@
 ﻿#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
-# Canopé activity: A video viewer for Canopé videos
+# Video Viewer activity: A video viewer a set of videos on a server
 # Lionel Laské
 
 
-from gi.repository import Gtk
+from gi.repository import Gtk, Gdk
 import logging
 import os
 
@@ -48,32 +48,11 @@ class EnyoActivity(activity.Activity):
         self.make_toolbar()
         self.make_mainview()
 
-    def filter_french(self, button):
-        if self.filter_status == 'French':
+    def filter_changed(self, button):
+        if self.filter_status == button.get_label():
             self.filter_status = ''
         else:
-            self.filter_status = 'French'
-        self.enyo.send_message("filter_clicked", self.filter_status)
-
-    def filter_math(self, button):
-        if self.filter_status == 'Math':
-            self.filter_status = ''
-        else:
-            self.filter_status = 'Math'
-        self.enyo.send_message("filter_clicked", self.filter_status)
-
-    def filter_science(self, button):
-        if self.filter_status == 'Science':
-            self.filter_status = ''
-        else:
-            self.filter_status = 'Science'
-        self.enyo.send_message("filter_clicked", self.filter_status)
-
-    def filter_civism(self, button):
-        if self.filter_status == 'Civism':
-            self.filter_status = ''
-        else:
-            self.filter_status = 'Civism'
+            self.filter_status = button.get_label()
         self.enyo.send_message("filter_clicked", self.filter_status)
 
     def favorite(self, button):
@@ -91,9 +70,6 @@ class EnyoActivity(activity.Activity):
         self.context = context
         web_app_page = os.path.join(activity.get_bundle_path(), "index.html")
         self.webview.load_uri('file://' + web_app_page+"?onsugar=1")
-
-    def settings(self, button):
-        self.enyo.send_message("settings_clicked")
 
     def init_context(self, args):
         """Init Javascript context sending buddy information"""
@@ -127,6 +103,7 @@ class EnyoActivity(activity.Activity):
         self.enyo.connect("ready", self.init_context)
         self.enyo.connect("save-context", self.save_context)
         self.enyo.connect("refresh-screen", self.refresh)
+        self.enyo.connect("set_categories", self.set_categories)
 
         # Go to first page
         web_app_page = os.path.join(activity.get_bundle_path(), "index.html")
@@ -144,34 +121,14 @@ class EnyoActivity(activity.Activity):
         toolbar_box.toolbar.insert(activity_button, 0)
         activity_button.show()
 
-        toolbarview = Gtk.Toolbar()
+        self.toolbarview = Gtk.Toolbar()
         langtoolbar_button = ToolbarButton(
             label=_('Filter'),
-            page=toolbarview,
+            page=self.toolbarview,
             icon_name='filter')
         langtoolbar_button.show()
         toolbar_box.toolbar.insert(langtoolbar_button, -1)
-        tool = ToolButton('grammar')
-        tool.set_tooltip(_('Langue française'))
-        tool.connect('clicked', self.filter_french)
-        tool.show()
-        toolbarview.insert(tool, -1)
-        tool = ToolButton('calculator')
-        tool.set_tooltip(_('Mathématiques'))
-        tool.connect('clicked', self.filter_math)
-        tool.show()
-        toolbarview.insert(tool, -1)
-        tool = ToolButton('earth')
-        tool.set_tooltip(_('Science'))
-        tool.connect('clicked', self.filter_science)
-        tool.show()
-        toolbarview.insert(tool, -1)
-        tool = ToolButton('institution')
-        tool.set_tooltip(_('Instruction civique et histoire géographie'))
-        tool.connect('clicked', self.filter_civism)
-        tool.show()
-        toolbarview.insert(tool, -1)
-        toolbarview.show()
+        self.toolbarview.show()
 
         box_search_item = Gtk.ToolItem()
         self.search_entry = Gtk.Entry()
@@ -189,12 +146,6 @@ class EnyoActivity(activity.Activity):
         favorite_button.show()
         self.favorite_button = favorite_button
 
-        settings_button = ToolButton('settings')
-        settings_button.set_tooltip('Settings')
-        settings_button.connect('clicked', self.settings)
-        toolbar_box.toolbar.insert(settings_button, -1)
-        settings_button.show()
-
         separator = Gtk.SeparatorToolItem()
         separator.props.draw = False
         separator.set_expand(True)
@@ -207,6 +158,22 @@ class EnyoActivity(activity.Activity):
 
         self.set_toolbar_box(toolbar_box)
         toolbar_box.show()
+
+    def set_categories(self, categories):
+        """Called when Enyo load a new database with new categories, udate the filter"""
+        nitems = self.toolbarview.get_n_items()
+        for i in range(0, nitems):
+            self.toolbarview.remove(0)
+        for category in categories:
+            btn = Gtk.Button.new_with_label(category['id'])
+            btn.override_background_color(Gtk.StateFlags.NORMAL, Gdk.RGBA(0.1568, 0.1568, 0.1568, 1.0))
+            btn.connect('clicked', self.filter_changed)
+            btn.show()
+            tool = Gtk.ToolItem()
+            tool.add(btn)
+            tool.show()
+            self.toolbarview.insert(tool, -1)
+        self.toolbarview.show()
 
     def write_file(self, file_path):
         """Called when activity is saved, get the current context in Enyo"""

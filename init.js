@@ -19,6 +19,10 @@ if (Util.onSugar()) {
 	Util.sugar.connect('text_typed', function(textfilter) {
 		app.setFilter({text: textfilter});
 	});
+	var filterpalette = {};
+	filterpalette.setCategories = function(categories) {
+		Util.sugar.sendMessage("set_categories", categories);
+	};
 
 	// Handle context event from Python
 	Util.sugar.connect('load-context', function(context) {
@@ -32,7 +36,7 @@ if (Util.onSugar()) {
 	});
 
 	// Launch main screen
-	app = new VideoViewer.App({activity: null});
+	app = new VideoViewer.App({activity: null, filter: filterpalette});
 	constant.videoType = "ogv";
 	app.renderInto(document.getElementById("viewer"));
 	Util.sugar.sendMessage("ready");
