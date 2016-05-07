@@ -9,7 +9,7 @@ enyo.kind({
 	components: [
 		{name: "items", classes: "library-content", kind: "Repeater", onSetupItem: "setupItem", components: [
 			{ classes: "library", components: [
-				{ name: "itemImage", classes: "libraryImage", kind: "Image", ontap: "selectLibrary" },
+				{ name: "itemImage", classes: "libraryImage", kind: "Image", onerror: "defaultImage", ontap: "selectLibrary" },
 				{ name: "itemOverlay", classes: "libraryOverlay", ontap: "selectLibrary" },
 				{ name: "itemTitle", classes: "libraryTitle", content: "", ontap: "selectLibrary" },
 				{ name: "itemIcon", classes: "libraryIcon", kind: "Image", src: "icons/library.svg", ontap: "selectLibrary" }
@@ -36,6 +36,10 @@ enyo.kind({
 	// Process events
 	closeDialog: function() {
 		this.hide();
+	},
+
+	defaultImage: function(inSender, inEvent) {
+		inEvent.dispatchTarget.setAttribute("src", "images/nolibrary.png");
 	},
 	
 	selectLibrary: function(inSender, inEvent) {
