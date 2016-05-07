@@ -9,7 +9,8 @@ Util = {};
 var app;
 Util.context = {
 	filter: {category: "", text: "", favorite: false},
-	library: constant.library,
+	libraries: constant.libraries,
+	library: null,
 	favorites: {},
 	readtimes: {},
 	currentindex: 0
@@ -25,11 +26,14 @@ Util.saveContext = function() {
 Util.loadContext = function(callback, loaded) {
 	if (!Util.onSugar()) {
 		var datastoreObject = app.activity.getDatastoreObject();
+		app.showLibraries();
 		datastoreObject.loadAsText(function (error, metadata, data) {
 			//console.log("LOAD CONTEXT <"+data+">");
 			var context = JSON.parse(data);
 			if (context) {
 				Util.context = context;
+				app.loadDatabase();
+				app.hideLibraries();
 			}
 			callback();
 		});
@@ -87,6 +91,8 @@ Util.getReadTime = function(id) {
 Util.database = [];
 Util.categories = [];
 Util.loadDatabase = function(response, error) {
+	if (Util.context.library == null)
+		return;
 	var ajax = new enyo.Ajax({
 		url: Util.context.library.database,
 		method: "GET",
@@ -130,6 +136,13 @@ Util.setIndex = function(index) {
 }
 Util.getIndex = function() {
 	return Util.context.currentindex;
+}
+
+Util.setLibrary = function(library) {
+	Util.context.library = library;
+}
+Util.getLibrary = function() {
+	return Util.context.library;
 }
 
 // Misc

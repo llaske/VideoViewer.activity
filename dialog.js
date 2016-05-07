@@ -1,3 +1,52 @@
+// Library dialog
+enyo.kind({
+	name: "VideoViewer.LibraryDialog",
+	kind: enyo.Popup,
+	classes: "library-dialog",
+	centered: false,
+	modal: false,
+	floating: true,
+	components: [
+		{name: "items", classes: "library-content", kind: "Repeater", onSetupItem: "setupItem", components: [
+			{ classes: "library", components: [
+				{ name: "itemImage", classes: "libraryImage", kind: "Image", ontap: "selectLibrary" },
+				{ name: "itemOverlay", classes: "libraryOverlay", ontap: "selectLibrary" },
+				{ name: "itemTitle", classes: "libraryTitle", content: "", ontap: "selectLibrary" },
+				{ name: "itemIcon", classes: "libraryIcon", kind: "Image", src: "icons/library.svg", ontap: "selectLibrary" }
+			]}
+		]},
+	],
+
+	// Constructor
+	create: function() {
+		this.inherited(arguments);
+		this.draw();
+	},
+
+	draw: function() {
+		this.$.items.setCount(constant.libraries.length);	
+	},
+
+	// Init setup for a line
+	setupItem: function(inSender, inEvent) {
+		inEvent.item.$.itemImage.setAttribute("src", "images/"+constant.libraries[inEvent.index].name+".png");
+		inEvent.item.$.itemTitle.setContent(constant.libraries[inEvent.index].title);
+	},
+	
+	// Process events
+	closeDialog: function() {
+		this.hide();
+	},
+	
+	selectLibrary: function(inSender, inEvent) {
+		Util.setLibrary(constant.libraries[inEvent.index]);
+		Util.saveContext();
+		app.loadDatabase();
+		this.closeDialog();
+	}
+});
+
+
 // Video dialog
 enyo.kind({
 	name: "VideoViewer.VideoDialog",

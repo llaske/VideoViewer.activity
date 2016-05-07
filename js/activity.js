@@ -12,7 +12,6 @@ define(function (require) {
 		// Create palette
         var filterButton = document.getElementById("filter-button");
 		filterpalette = new filterpalette.FilterPalette(filterButton, undefined);
-		filterpalette.setCategories([{id: "Langue française", title: "Langue française"}, {id: "2", title: "Math is very good"}, {id: "3", title: "Math3"}, {id: "4", title: "Math4"}]);
 		filterpalette.addEventListener('filter', function() {
 			app.setFilter({category: filterpalette.getFilter()});
 			Util.saveContext();
@@ -26,6 +25,9 @@ define(function (require) {
 			else
 				invoker.style.backgroundImage = 'url(icons/notfavorite.svg)';
 			app.setFilter({favorite: isFavorite});
+		};
+		document.getElementById("library-button").onclick = function(s, e) {
+			app.showLibraries();
 		};
 
 		// Launch main screen

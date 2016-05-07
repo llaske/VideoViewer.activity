@@ -17,9 +17,10 @@ enyo.kind({
 		]},
 		{name: "footer", classes: "viewer-footer toolbar", fit: false, components: [
 			{name: "previousbutton", kind: "Button", classes: "toolbutton previous-button pull-left", title:"Previous", ontap: "showPrevious", showing: false},
-			{name: "pagecount", content: "99/99", classes: "page-count"},
+			{name: "pagecount", content: "0/0", classes: "page-count"},
 			{name: "nextbutton", kind: "Button", classes: "toolbutton next-button pull-right", title:"Next", ontap: "showNext", showing: false}
 		]},
+		{name: "libraryDialog", kind: "VideoViewer.LibraryDialog", onHide: "librariesHidden"},
 		{name: "videoDialog", kind: "VideoViewer.VideoDialog"}
 	],
 
@@ -30,7 +31,12 @@ enyo.kind({
 		this.index = 0;
 		this.computeSize();
 		this.favorite = false;
-		var that = app = this;
+		app = this;
+		this.loadDatabase();
+	},
+
+	loadDatabase: function() {
+		var that = this;
 		this.$.spinner.setShowing(true);
 		Util.loadDatabase(function(response) {
 			that.collection = response;
@@ -110,6 +116,19 @@ enyo.kind({
 		this.$.videoDialog.setItem(item);
 	},
 
+	showLibraries: function() {
+		this.$.libraryDialog.show();
+	},
+	
+	hideLibraries: function() {
+		this.$.libraryDialog.hide();
+	},
+
+	librariesHidden: function() {
+		if (Util.getLibrary() == null)
+			this.showLibraries();
+	},
+	
 	setFilter: function(filter) {
 		Util.setFilter(filter);
 	},
