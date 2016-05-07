@@ -26,12 +26,12 @@ enyo.kind({
 
 	// Constructor
 	create: function() {
+		app = this;
 		this.inherited(arguments);
 		this.collection = [];
 		this.index = 0;
 		this.computeSize();
 		this.favorite = false;
-		app = this;
 		this.loadDatabase();
 	},
 

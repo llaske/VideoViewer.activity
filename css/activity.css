@@ -256,6 +256,9 @@
 	display: inline-block;
 }
 
+.library-content {
+}
+
 .library-item {
 	margin-left: 1%;
 	margin-top: 1%;

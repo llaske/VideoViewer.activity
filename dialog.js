@@ -7,23 +7,30 @@ enyo.kind({
 	modal: false,
 	floating: true,
 	components: [
-		{name: "items", classes: "library-content", kind: "Repeater", onSetupItem: "setupItem", components: [
-			{ classes: "library", components: [
-				{ name: "itemImage", classes: "libraryImage", kind: "Image", onerror: "defaultImage", ontap: "selectLibrary" },
-				{ name: "itemOverlay", classes: "libraryOverlay", ontap: "selectLibrary" },
-				{ name: "itemTitle", classes: "libraryTitle", content: "", ontap: "selectLibrary" },
-				{ name: "itemIcon", classes: "libraryIcon", kind: "Image", src: "icons/library.svg", ontap: "selectLibrary" }
-			]}
-		]},
+		{name: "scroller", kind: "Scroller", components: [
+			{name: "items", classes: "library-content", kind: "Repeater", onSetupItem: "setupItem", components: [
+				{ classes: "library", components: [
+					{ name: "itemImage", classes: "libraryImage", kind: "Image", onerror: "defaultImage", ontap: "selectLibrary" },
+					{ name: "itemOverlay", classes: "libraryOverlay", ontap: "selectLibrary" },
+					{ name: "itemTitle", classes: "libraryTitle", content: "", ontap: "selectLibrary" },
+					{ name: "itemIcon", classes: "libraryIcon", kind: "Image", src: "icons/library.svg", ontap: "selectLibrary" }
+				]}
+			]},
+		]}
 	],
 
 	// Constructor
 	create: function() {
 		this.inherited(arguments);
+	},
+	
+	render: function() {
+		this.inherited(arguments);
 		this.draw();
 	},
 
 	draw: function() {
+		this.$.items.applyStyle("height", document.getElementById(app.$.content.id).style.height);
 		this.$.items.setCount(constant.libraries.length);	
 	},
 

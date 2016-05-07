@@ -18,7 +18,7 @@ constant.libraries = [
 		database: "http://laske.fr/tmp/torido/khan.php",
 		videos: "http://s3.amazonaws.com/KA-youtube-converted/%id%.mp4/%id%",
 		images: "http://s3.amazonaws.com/KA-youtube-converted/%id%.mp4/%id%.png"
-	},
+	}
 ];
 constant.videoType = "mp4";
 
