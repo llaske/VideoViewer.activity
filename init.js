@@ -23,12 +23,14 @@ if (Util.onSugar()) {
 	filterpalette.setCategories = function(categories) {
 		Util.sugar.sendMessage("set_categories", categories);
 	};
+	Util.sugar.connect('library_clicked', function() {
+		app.showLibraries();
+	});
 
 	// Handle context event from Python
 	Util.sugar.connect('load-context', function(context) {
 		//console.log("#JS LOAD CONTEXT "+JSON.stringify(context));
 		Util.loadContext(null, context);
-		app.localeChanged(Util.getIndex());
 	});
 	Util.sugar.connect('save-context', function() {
 		//console.log("#JS SAVE CONTEXT "+JSON.stringify(Util.context));

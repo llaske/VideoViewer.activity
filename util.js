@@ -39,6 +39,8 @@ Util.loadContext = function(callback, loaded) {
 		});
 	} else {
 		Util.context = loaded;
+		app.loadDatabase();
+		app.hideLibraries();
 	}
 };
 

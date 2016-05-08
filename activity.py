@@ -66,6 +66,9 @@ class EnyoActivity(activity.Activity):
     def text_filter(self, entry):
         self.enyo.send_message("text_typed", entry.props.text)
 
+    def library_clicked(self, button):
+        self.enyo.send_message("library_clicked")
+
     def refresh(self, context):
         self.context = context
         web_app_page = os.path.join(activity.get_bundle_path(), "index.html")
@@ -86,6 +89,8 @@ class EnyoActivity(activity.Activity):
         self.enyo.send_message("buddy", buddy)
         if self.context != {}:
             self.enyo.send_message("load-context", self.context)
+        else:
+            self.enyo.send_message("library_clicked")
 
     def make_mainview(self):
         """Create the activity view"""
@@ -146,6 +151,12 @@ class EnyoActivity(activity.Activity):
         favorite_button.show()
         self.favorite_button = favorite_button
 
+        library_button = ToolButton('library')
+        library_button.set_tooltip('Show libraries')
+        library_button.connect('clicked', self.library_clicked)
+        toolbar_box.toolbar.insert(library_button, -1)
+        library_button.show()
+
         separator = Gtk.SeparatorToolItem()
         separator.props.draw = False
         separator.set_expand(True)
@@ -163,7 +174,7 @@ class EnyoActivity(activity.Activity):
         """Called when Enyo load a new database with new categories, udate the filter"""
         nitems = self.toolbarview.get_n_items()
         for i in range(0, nitems):
-            self.toolbarview.remove(0)
+            self.toolbarview.remove(self.toolbarview.get_nth_item(0))
         for category in categories:
             btn = Gtk.Button.new_with_label(category['id'])
             btn.override_background_color(Gtk.StateFlags.NORMAL, Gdk.RGBA(0.1568, 0.1568, 0.1568, 1.0))
