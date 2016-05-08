@@ -83,7 +83,7 @@ enyo.kind({
 					title: collection[this.index+i].title,
 					category: collection[this.index+i].category,
 					isFavorite: Util.getFavorite(collection[this.index+i].id),
-					imgSuffix: collection[this.index+i].imgsuffix,
+					image: collection[this.index+i].image,
 					onVideoPlayed: "showVideo"
 				},
 				{ owner: this }

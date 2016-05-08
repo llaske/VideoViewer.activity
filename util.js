@@ -93,32 +93,34 @@ Util.categories = [];
 Util.loadDatabase = function(response, error) {
 	if (Util.context.library == null)
 		return;
-	var ajax = new enyo.Ajax({
-		url: Util.context.library.database,
-		method: "GET",
-		handleAs: "json"
-	});
-	ajax.response(function(sender, data) {
-		// Store date base loaded
-		Util.database = data;
+	Util.getLanguage(function(language) {
+		var ajax = new enyo.Ajax({
+			url: Util.context.library.database.replace(new RegExp("%language%", "g"),language),
+			method: "GET",
+			handleAs: "json"
+		});
+		ajax.response(function(sender, data) {
+			// Store date base loaded
+			Util.database = data;
 
-		// Store categories
-		Util.categories = [];
-		for (var i = 0 ; i < data.length ; i++) {
-			var category = data[i].category;
-			if (category !== undefined) {
-				var found = false;
-				for (var j = 0 ; !found && j < Util.categories.length ; j++) {
-					if (category == Util.categories[j].id) found = true;
+			// Store categories
+			Util.categories = [];
+			for (var i = 0 ; i < data.length ; i++) {
+				var category = data[i].category;
+				if (category !== undefined) {
+					var found = false;
+					for (var j = 0 ; !found && j < Util.categories.length ; j++) {
+						if (category == Util.categories[j].id) found = true;
+					}
+					if (!found) Util.categories.push({id: category, title: category});
 				}
-				if (!found) Util.categories.push({id: category, title: category});
 			}
-		}
-		app.getFilter().setCategories(Util.categories);
-		response(data);
+			app.getFilter().setCategories(Util.categories);
+			response(data);
+		});
+		ajax.error(error);
+		ajax.go();
 	});
-	ajax.error(error);
-	ajax.go();
 }
 Util.getDatabase = function() {
 	return Util.database;
@@ -152,4 +154,18 @@ Util.onSugar = function() {
 		return match && decodeURIComponent(match[1].replace(/\+/g, ' '));
     };
 	return getUrlParameter("onsugar");
+}
+
+Util.getLanguage = function(callback) {
+	if (Util.onSugar()) {
+		callback(navigator.language);
+		return;
+	}
+	if (typeof chrome != 'undefined' && chrome.app && chrome.app.runtime) {
+		chrome.storage.local.get('sugar_settings', function(values) {
+			callback(JSON.parse(values.sugar_settings).language);
+		}); 
+	} else {
+		callback(JSON.parse(localStorage.sugar_settings).language);
+	}
 }

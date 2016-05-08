@@ -7,7 +7,7 @@ enyo.kind({
 		title: "",
 		category: "",
 		isFavorite: false,
-		imgSuffix: ""
+		image: ""
 	},
 	events: {
 		onVideoPlayed: ""
@@ -33,8 +33,8 @@ enyo.kind({
 
 	// Item setup
 	nameChanged: function() {
-		var imgsuffix = this.imgSuffix ? this.imgSuffix : "";
-		var imgurl = Util.getImages().replace(new RegExp("%id%", "g"),this.code).replace("%imgsuffix%", this.imgSuffix);
+		var image = this.image ? this.image : "";
+		var imgurl = this.replaceValues(Util.getImages());
 		if (typeof chrome != 'undefined' && chrome.app && chrome.app.runtime) {
 			// HACK: When in Chrome App image should be load using a XmlHttpRequest
 			var xhr = new XMLHttpRequest();
@@ -73,8 +73,18 @@ enyo.kind({
 		this.$.background.setShowing(false);
 	},
 
+	replaceValues: function(template) {
+		// Remplace values in the template
+		var output = template;
+		output = output.replace(new RegExp("%id%", "g"),this.code);
+		output = output.replace(new RegExp("%image%", "g"), this.image);
+		output = output.replace(new RegExp("%category%", "g"), this.category);
+		output = output.replace(new RegExp("%title%", "g"), this.title);
+		return output;
+	},
+	
 	videoURL: function() {
-		return Util.getVideos().replace(new RegExp("%id%", "g"),this.code)+"."+constant.videoType;
+		return this.replaceValues(Util.getVideos())+"."+constant.videoType;
 
 	},
 
