@@ -39,6 +39,7 @@ enyo.kind({
 		var that = this;
 		this.$.spinner.setShowing(true);
 		Util.loadDatabase(function(response) {
+			that.index = 0;
 			that.collection = response;
 			that.$.spinner.setShowing(false);
 			that.$.cloudwarning.setShowing(false);
