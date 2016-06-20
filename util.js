@@ -148,6 +148,16 @@ Util.setLibrary = function(library) {
 Util.getLibrary = function() {
 	return Util.context.library;
 }
+Util.removeLibrary = function(library) {
+	if (Util.context.library == library || Util.context.libraries.length == 1)
+		return;
+	var newlibraries = [];
+	for (var i = 0 ; i < Util.context.libraries.length ; i++) {
+		if (Util.context.libraries[i] != library)
+			newlibraries.push(Util.context.libraries[i]);
+	}
+	Util.context.libraries = newlibraries;
+}
 
 // Misc
 Util.onSugar = function() {

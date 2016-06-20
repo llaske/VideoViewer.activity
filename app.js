@@ -118,6 +118,7 @@ enyo.kind({
 	},
 
 	showLibraries: function() {
+		this.$.libraryDialog.reload();
 		this.$.libraryDialog.show();
 	},
 	

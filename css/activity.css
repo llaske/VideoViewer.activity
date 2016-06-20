@@ -232,6 +232,14 @@
 	top: 1%;
 }
 
+.libraryRemove {
+	width: 8%;
+	position: absolute;
+	left: 1%;
+	bottom: 2%;
+	z-index: 4;
+}
+
 .library-dialog {
 	position: absolute;
 	top: 5%;

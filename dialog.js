@@ -13,7 +13,8 @@ enyo.kind({
 					{ name: "itemImage", classes: "libraryImage", kind: "Image", onerror: "defaultImage", ontap: "selectLibrary" },
 					{ name: "itemOverlay", classes: "libraryOverlay", ontap: "selectLibrary" },
 					{ name: "itemTitle", classes: "libraryTitle", content: "", ontap: "selectLibrary" },
-					{ name: "itemIcon", classes: "libraryIcon", kind: "Image", src: "icons/library.svg", ontap: "selectLibrary" }
+					{ name: "itemIcon", classes: "libraryIcon", kind: "Image", src: "icons/library.svg", ontap: "selectLibrary" },
+					{ name: "itemRemove", classes: "libraryRemove", kind: "Image", src: "icons/list-remove.svg", ontap: "removeLibrary" }
 				]}
 			]},
 		]}
@@ -31,13 +32,17 @@ enyo.kind({
 
 	draw: function() {
 		this.$.items.applyStyle("height", document.getElementById(app.$.content.id).style.height);
-		this.$.items.setCount(constant.libraries.length);	
+		this.$.items.setCount(Util.context.libraries.length);	
+	},
+	
+	reload: function() {
+		this.$.items.setCount(Util.context.libraries.length);
 	},
 
 	// Init setup for a line
 	setupItem: function(inSender, inEvent) {
-		inEvent.item.$.itemImage.setAttribute("src", "images/"+constant.libraries[inEvent.index].name+".png");
-		inEvent.item.$.itemTitle.setContent(constant.libraries[inEvent.index].title);
+		inEvent.item.$.itemImage.setAttribute("src", "images/"+Util.context.libraries[inEvent.index].name+".png");
+		inEvent.item.$.itemTitle.setContent(Util.context.libraries[inEvent.index].title);
 	},
 	
 	// Process events
@@ -50,10 +55,16 @@ enyo.kind({
 	},
 	
 	selectLibrary: function(inSender, inEvent) {
-		Util.setLibrary(constant.libraries[inEvent.index]);
+		Util.setLibrary(Util.context.libraries[inEvent.index]);
 		Util.saveContext();
 		app.loadDatabase();
 		this.closeDialog();
+	},
+	
+	removeLibrary: function(inSender, inEvent) {
+		Util.removeLibrary(Util.context.libraries[inEvent.index]);
+		Util.saveContext();
+		this.draw();
 	}
 });
 
