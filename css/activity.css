@@ -240,6 +240,14 @@
 	z-index: 4;
 }
 
+.libraryAdd {
+	width: 5%;
+	position: absolute;
+	right: 1%;
+	bottom: 2%;
+	z-index: 4;
+}
+
 .library-dialog {
 	position: absolute;
 	top: 5%;
@@ -274,7 +282,6 @@
 	max-height: 90%;
 	vertical-align: center;
 }
-
 
 .video-dialog {
 	position: absolute;
@@ -317,7 +324,7 @@
 .module-icon {
 	position: absolute;
 	left: 10px;
-	background-image: url(../icons/remote.svg);
+	background-image: url(../icons/library.svg);
 	width: 49px;
 	height: 49px;
 }
@@ -329,9 +336,9 @@
 	width: 95%;
 	max-width: 400px;
 	height: 95%;
-	max-height: 220px;
+	max-height: 180px;
 	background-color: #ffffff;
-	border: 2px solid #808080;
+	border: 2px solid #808080;	
 }
 
 .module-text {
@@ -340,7 +347,7 @@
 	left: 80px;
 	top: 20px;
 	color: white;
-	word-wrap: break-word;
+	word-wrap: break-word;	
 }
 
 .module-cancel-button {
@@ -361,16 +368,6 @@
 	height: 35px !important;
 }
 
-.khan-checkbox {
-	margin-left: 20px !important;
-	margin-top: 30px !important;
-}
-
-.local-checkbox {
-	margin-left: 20px !important;
-	margin-top: 30px !important;
-}
-
 .server-message {
 	margin-left: 10px;
 	margin-top: 20px;
@@ -383,7 +380,7 @@
 
 .server-httplabel {
 	margin-left: 15px;
-	margin-top: 26px;
+	margin-top: 16px;
 	color: black;
 	display: inline-block;
 	vertical-align: middle;
@@ -391,8 +388,8 @@
 
 .server-servername {
 	display: inline-block;
-	width: 165px;
-	margin-top: 26px;
+	width: 275px;
+	margin-top: 16px;
 	vertical-align: middle;
 }
 

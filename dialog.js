@@ -17,7 +17,8 @@ enyo.kind({
 					{ name: "itemRemove", classes: "libraryRemove", kind: "Image", src: "icons/list-remove.svg", ontap: "removeLibrary" }
 				]}
 			]},
-		]}
+		]},
+		{ name: "itemAdd", classes: "libraryAdd", kind: "Image", src: "icons/list-add.svg", ontap: "addLibrary" }
 	],
 
 	// Constructor
@@ -65,6 +66,10 @@ enyo.kind({
 		Util.removeLibrary(Util.context.libraries[inEvent.index]);
 		Util.saveContext();
 		this.draw();
+	},
+	
+	addLibrary: function() {
+		app.$.addLibraryDialog.show();
 	}
 });
 
@@ -134,5 +139,77 @@ enyo.kind({
 		this.item.setIsFavorite(!this.item.isFavorite);
 		Util.setFavorite(this.item.code, this.item.isFavorite);
 		this.rendered();
+	}
+});
+
+
+// Add library dialog
+enyo.kind({
+	name: "VideoViewer.AddLibraryDialog",
+	kind: "enyo.Popup",
+	classes: "module-dialog",
+	centered: true,
+	modal: true,
+	floating: true,
+	autoDismiss: false,
+	components: [
+		{name: "toolbar", classes: "toolbar", components: [
+			{name: "icon", classes: "module-icon"},
+			{name: "text", content: "Add library", classes: "module-text"},
+			{name: "cancelbutton", kind: "Button", classes: "toolbutton module-cancel-button", ontap: "cancel"},		
+			{name: "okbutton", kind: "Button", classes: "toolbutton module-ok-button", ontap: "ok"}
+		]},
+		{content: "Library description URL:", classes: "server-message"},
+		{name: "content", classes: "server-content", components: [
+			{content: "http://", classes: "server-httplabel"},
+			{name: "servername", kind: "Input", classes: "server-servername", onkeydown: "enterclick"}
+		]}
+	],
+	
+	// Constructor
+	create: function() {
+		this.inherited(arguments);
+		this.init();
+	},
+	
+	init: function() {
+	},
+	
+	rendered: function() {
+	},
+	
+	// Event handling
+	cancel: function() {
+		this.hide();
+	},
+	
+	ok: function() {
+		this.hide();
+		var ajax = new enyo.Ajax({
+			url: "http://"+this.$.servername.getValue(),
+			method: "GET",
+			handleAs: "json"
+		});
+		var that = this;
+		ajax.response(function(inSender, inResponse) {
+			if (!inResponse.name || !inResponse.title || !inResponse.database || !inResponse.images) {
+				console.log("Incorrect format for library 'http://"+that.$.servername.getValue()+"'");
+				return;
+			}
+			Util.addLibrary(inResponse);
+			Util.saveContext();
+			app.$.libraryDialog.draw();
+		});
+		ajax.error(function() {
+			console.log("Unable to load 'http://"+that.$.servername.getValue()+"'");
+		});
+		ajax.go();
+	},
+	
+	enterclick: function(inSender, inEvent) {
+		if (inEvent.keyCode === 13) {
+			this.ok();
+			return true;
+		}
 	}
 });

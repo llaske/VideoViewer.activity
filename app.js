@@ -21,6 +21,7 @@ enyo.kind({
 			{name: "nextbutton", kind: "Button", classes: "toolbutton next-button pull-right", title:"Next", ontap: "showNext", showing: false}
 		]},
 		{name: "libraryDialog", kind: "VideoViewer.LibraryDialog", onHide: "librariesHidden"},
+		{name: "addLibraryDialog", kind: "VideoViewer.AddLibraryDialog"},
 		{name: "videoDialog", kind: "VideoViewer.VideoDialog"}
 	],
 

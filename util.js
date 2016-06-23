@@ -148,6 +148,9 @@ Util.setLibrary = function(library) {
 Util.getLibrary = function() {
 	return Util.context.library;
 }
+Util.addLibrary = function(library) {
+	Util.context.libraries.push(library);
+}
 Util.removeLibrary = function(library) {
 	if (Util.context.library == library || Util.context.libraries.length == 1)
 		return;

@@ -7,27 +7,17 @@ Two set of videos are linked natively with the activity: [Khan Academy](http://k
 
 Video Viewer is a Sugar-Web activity, it could work both into Sugar Learning platform and in Sugarizer.
 
-If you want to change the set of libraries viewable by the activity, you need to update the file [constant.js](constant.js) and specifically the 
-`constant.libraries` property.
+A standard set of libraries is set with the activity (see `constant.libraries` property in [constant.js](constant.js)). You could add your own library using the library dialog (click on the library icon on the toolbar). You should provide to the dialog the URL of a JSON file that include an object with all these properties:
 
-	constant.libraries = [
-		{
-			name: "khanacademy",
-			title: "Khan Academy",
-			database: "http://sugarizer.org/content/khan.php?lang=%language%",
-			videos: "http://s3.amazonaws.com/KA-youtube-converted/%id%.mp4/%id%",
-			images: "http://s3.amazonaws.com/KA-youtube-converted/%id%.mp4/%id%.png"
-		},
-		{
-			name: "canope",
-			title: "Canopé",
-			database: "http://sugarizer.org/content/canope.php",
-			videos: "https://videos.reseau-canope.fr/download.php?file=lesfondamentaux/%id%_sd",
-			images: "https://www.reseau-canope.fr/lesfondamentaux/uploads/tx_cndpfondamentaux/%image%.png"
-		}
-	];
+	{
+		name: "canope",
+		title: "Canopé",
+		database: "http://sugarizer.org/content/canope.php",
+		videos: "https://videos.reseau-canope.fr/download.php?file=lesfondamentaux/%id%_sd",
+		images: "https://www.reseau-canope.fr/lesfondamentaux/uploads/tx_cndpfondamentaux/%image%.png"
+	}
 
-Each item in this array is one library. Here what means each field in an item:
+Here what means each field:
 
 * **name**: name is the unique identifier of the library. The activity expect to find an image named `<name>.png` for the library in the [images](images) directory (else a default image will be used).
 * **title**: title is the description of the library. It's used as title for the library into the library selection window.
