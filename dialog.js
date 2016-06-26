@@ -42,7 +42,20 @@ enyo.kind({
 
 	// Init setup for a line
 	setupItem: function(inSender, inEvent) {
-		inEvent.item.$.itemImage.setAttribute("src", "images/"+Util.context.libraries[inEvent.index].name+".png");
+		var imgurl = Util.context.libraries[inEvent.index].image;
+		if (imgurl.startsWith("http://", 0) && typeof chrome != 'undefined' && chrome.app && chrome.app.runtime) {
+			// HACK: When in Chrome App image should be load using a XmlHttpRequest
+			var xhr = new XMLHttpRequest();
+			var that = inEvent.item;
+			xhr.open('GET', imgurl, true);
+			xhr.responseType = 'blob';
+			xhr.onload = function(e) {
+				that.$.itemImage.setAttribute("src", window.URL.createObjectURL(this.response));
+			};
+			xhr.send();
+		} else {
+			inEvent.item.$.itemImage.setAttribute("src", imgurl);
+		}
 		inEvent.item.$.itemTitle.setContent(Util.context.libraries[inEvent.index].title);
 	},
 	
@@ -192,7 +205,7 @@ enyo.kind({
 		});
 		var that = this;
 		ajax.response(function(inSender, inResponse) {
-			if (!inResponse.name || !inResponse.title || !inResponse.database || !inResponse.images) {
+			if (!inResponse.name || !inResponse.image || !inResponse.title || !inResponse.database || !inResponse.images) {
 				console.log("Incorrect format for library 'http://"+that.$.servername.getValue()+"'");
 				return;
 			}

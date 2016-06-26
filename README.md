@@ -12,6 +12,7 @@ A standard set of libraries is set with the activity (see `constant.libraries` p
 	{
 		name: "canope",
 		title: "Canopé",
+		image: "images/canope.png",
 		database: "http://sugarizer.org/content/canope.php",
 		videos: "https://videos.reseau-canope.fr/download.php?file=lesfondamentaux/%id%_sd",
 		images: "https://www.reseau-canope.fr/lesfondamentaux/uploads/tx_cndpfondamentaux/%image%.png"
@@ -19,7 +20,8 @@ A standard set of libraries is set with the activity (see `constant.libraries` p
 
 Here what means each field:
 
-* **name**: name is the unique identifier of the library. The activity expect to find an image named `<name>.png` for the library in the [images](images) directory (else a default image will be used).
+* **name**: name is the unique identifier of the library.
+* **image**: the image for the library. For included libraries, it's a local path but it could be a remote image as well.
 * **title**: title is the description of the library. It's used as title for the library into the library selection window.
 * **database**: database is the URL for the JSON file where the content is described (see below). You could include a `%language%` string into the URL that will be replaced by the language [ISO 639-1 code](https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes) of the current user.
 * **videos**: videos is the URL used to retrieve the video when the user click on it. You could include `%id%`, `%image%`, `%category%`, `%title%` in the URL (see below). They will be replaced by values of these fields for the clicked video. 
